@@ -1,15 +1,3 @@
-# 0.6.22
-
-1.5.6 / HA0.6.22：移除 0.6.21 的临时唤醒诊断，保留等待新广播的修复。1.5.5→1.5.6 实体 OTA 已成功：全程 126.8 秒，等待唤醒 77.2 秒（4 次尝试），上传和完整 CRC 约 50 秒。固件 1.5.6 仅更新版本号。集成代码不公开，仅发布更新说明。
-
-1.5.6 / HA0.6.22: removed the temporary wake diagnostics from 0.6.21 and kept the wait-for-advertisement fix. Physical 1.5.5→1.5.6 OTA succeeded in 126.8 s, with 77.2 s of wake wait (4 attempts) and about 50 s for upload and whole-image CRC. Firmware 1.5.6 changes only the version. Integration code is not published.
-
-# 0.6.21
-
-蓝牙代理暂未收到设备广播时，等待下一次广播再连接，不再空转；单轮唤醒等待由 180 秒延长到 240 秒。
-
-When the Bluetooth proxy has not yet seen the device, wait for the next advertisement instead of spinning; a single wake round now allows 240 s instead of 180 s.
-
 # 0.6.20
 
 1.5.5 / HA0.6.20：显式点击更新或写值时，在连接前清除本设备在ESPHome代理的旧主机服务表，避免普通模式和OTA模式切换时因缓存失配浪费一轮广播；保留能力读取和异常缓存重试。此优化位于HA，固件仅更新版本号。计量、光照、采样、休眠、电量及约每分钟300毫秒普通广播不变，完整镜像写入和CRC校验不变。双构建、固件故障测试和84项HA回归通过；1.5.4→1.5.5实体OTA已成功：成功轮122.8秒，等待唤醒72.745秒（4次尝试）、连接4.926秒、擦除1.125秒、上传37.480秒、完整CRC1.330秒、END0.144秒、重启确认5.003秒。HA确认1.5.5、100%、OTA关闭，燃气22.52m³保留，普通广播恢复。此前一轮180.2秒唤醒超时，未进入擦写，随后重试成功；不能把成功轮较短耗时等同为整体可靠性或提速保证。未测功耗。仅公开OTA镜像，完整烧录包仅本地。
@@ -187,7 +175,11 @@ English: update firmware 1.4.4 instructions (B ~5s phone settings, ~10s OTA, 5s 
 
 ## 0.4.8
 
-- 新增开发用热重载服务 `ch592_ota.reload_code`，改动后不用重启 HA；改版本号或新增实体平台仍需重启。
+- 新增开发用服务 **`ch592_ota.reload_code`**：从磁盘重新导入集成代码并重载配置
+  条目，**不用重启 HA**（几秒完成）。改了 `ble_ota.py` / `coordinator.py` 之类
+  的代码后：复制文件 → 开发者工具 → 动作 → `ch592_ota.reload_code` → 继续测。
+  注意：`manifest.json` 的版本号、以及新增平台（如新实体类型）仍需真正重启；
+  攒够一次改动后建议重启一次。
 
 ## 0.4.7
 
@@ -201,7 +193,8 @@ English: update firmware 1.4.4 instructions (B ~5s phone settings, ~10s OTA, 5s 
 
 ## 0.4.6
 
-- 修复 0.4.4 引入的异常处理错误，上传失败时能看到真实原因
+- **修复 0.4.4 引入的 `NameError: OtaError is not defined`**：`coordinator.py`
+  没有导入 `OtaError`，导致任何上传异常都被这个 NameError 覆盖，真实原因看不到
 - **HA 重启后不再自动升级遗留的 OTA 模式**：本次启动必须先看到过普通 BTHome 广播，
   才会认为 OTA 广播是「刚按了 B」；否则只在 `auto_note` 里说明原因
 - **连接失败不再整体重传**：只有已经传出去数据（进度 > 10%）之后的断链才重传 3 轮，
@@ -316,7 +309,9 @@ English: update firmware 1.4.4 instructions (B ~5s phone settings, ~10s OTA, 5s 
 
 ## 0.2.2
 
-- 修复 HA 2026.11 下集成无法加载的问题
+- 修复 HA 2026.11 下集成无法加载：`CONNECTION_BLUETOOTH` 应从
+  `homeassistant.helpers.device_registry` 导入（`homeassistant.const` 里没有），
+  之前导致 `entity.py` ImportError、所有平台加载失败
 
 ## 0.2.1
 

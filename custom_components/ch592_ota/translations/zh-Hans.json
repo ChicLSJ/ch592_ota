@@ -1,0 +1,81 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "CH592 OTA",
+        "description": "配置 CH592 燃气表。固件 1.4.7 起点击更新后自动开启 OTA；旧固件首次升级需长按 B 约 10 秒。B 约 5 秒松开仍为手机写值，无操作 5 秒退出。",
+        "data": {
+          "address": "蓝牙地址",
+          "name": "设备名称",
+          "firmware": "固件路径（位于 /config 下）"
+        }
+      }
+    },
+    "error": {
+      "invalid_address": "蓝牙地址格式不对，应为 AA:BB:CC:DD:EE:FF"
+    },
+    "abort": {
+      "already_configured": "该设备已经配置过了"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "CH592 OTA 选项",
+        "data": {
+          "firmware": "固件路径（位于 /config 下）",
+          "manifest_url": "固件清单 URL（留空 = GitHub 自动检查）",
+          "auto_install_on_ota_mode": "已下载固件后，设备进入 OTA 模式时自动安装"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "firmware_version": {
+        "name": "固件"
+      },
+      "ota_status": {
+        "name": "OTA 状态"
+      },
+      "ota_progress": {
+        "name": "OTA 进度"
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "固件"
+      }
+    },
+    "binary_sensor": {
+      "ota_mode": {
+        "name": "OTA 模式"
+      }
+    },
+    "button": {
+      "check_updates": {
+        "name": "检查更新"
+      },
+      "abort_ota": {
+        "name": "取消 OTA"
+      },
+      "write_gas": {
+        "name": "写入燃气值"
+      },
+      "write_threshold": {
+        "name": "写入脉冲阈值"
+      },
+      "cancel_pending": {
+        "name": "取消待写入"
+      }
+    },
+    "number": {
+      "gas_target": {
+        "name": "待写入燃气值"
+      },
+      "pulse_threshold": {
+        "name": "脉冲阈值"
+      }
+    }
+  }
+}

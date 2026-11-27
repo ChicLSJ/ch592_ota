@@ -1,0 +1,81 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "CH592 OTA",
+        "description": "Configure a CH592 gas meter. Firmware 1.4.7+ enters OTA automatically after Update is clicked. Older firmware needs B held for about 10 seconds for the first upgrade. Release B after about 5 seconds for phone settings; 5 idle seconds exits.",
+        "data": {
+          "address": "Bluetooth address",
+          "name": "Device name",
+          "firmware": "Firmware path (under /config)"
+        }
+      }
+    },
+    "error": {
+      "invalid_address": "Invalid Bluetooth address, expected AA:BB:CC:DD:EE:FF"
+    },
+    "abort": {
+      "already_configured": "This device is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "CH592 OTA options",
+        "data": {
+          "firmware": "Firmware path (under /config)",
+          "manifest_url": "Firmware manifest URL (leave empty for GitHub auto-check)",
+          "auto_install_on_ota_mode": "Install automatically after the image is downloaded"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "firmware_version": {
+        "name": "Firmware"
+      },
+      "ota_status": {
+        "name": "OTA status"
+      },
+      "ota_progress": {
+        "name": "OTA progress"
+      }
+    },
+    "update": {
+      "firmware": {
+        "name": "Firmware"
+      }
+    },
+    "binary_sensor": {
+      "ota_mode": {
+        "name": "OTA mode"
+      }
+    },
+    "button": {
+      "check_updates": {
+        "name": "Check for updates"
+      },
+      "abort_ota": {
+        "name": "Abort OTA"
+      },
+      "write_gas": {
+        "name": "Write gas value"
+      },
+      "write_threshold": {
+        "name": "Write pulse threshold"
+      },
+      "cancel_pending": {
+        "name": "Cancel pending writes"
+      }
+    },
+    "number": {
+      "gas_target": {
+        "name": "Gas target"
+      },
+      "pulse_threshold": {
+        "name": "Pulse threshold"
+      }
+    }
+  }
+}

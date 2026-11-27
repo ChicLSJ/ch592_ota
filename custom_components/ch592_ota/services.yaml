@@ -1,0 +1,115 @@
+flash:
+  name: Flash firmware
+  description: Upload a WCH backup-OTA image to a CH592 device that is in OTA mode.
+  fields:
+    address:
+      name: Bluetooth address
+      description: Target device address. Optional when only one CH592 is configured.
+      example: "AA:BB:CC:DD:EE:FF"
+      selector:
+        text:
+    firmware:
+      name: Firmware file
+      description: Path under the Home Assistant config directory. Defaults to the configured path.
+      example: "www/firmware/ch592_ota.bin"
+      selector:
+        text:
+    version:
+      name: Expected version
+      description: Version string to wait for after reboot. Read from the .json sidecar when omitted.
+      example: "1.2.4"
+      selector:
+        text:
+    chunk:
+      name: Chunk size
+      description: >-
+        Data bytes per PROGRAM write. Must be a multiple of 16 between 16 and 64.
+        Leave empty to auto-pick from the MTU, then fall back to 64/32/16.
+      example: 32
+      selector:
+        number:
+          min: 16
+          max: 64
+          step: 16
+          mode: box
+abort:
+  name: Abort OTA
+  description: Cancel a running OTA upload and disconnect from the device.
+  fields:
+    address:
+      name: Bluetooth address
+      description: Target device address. Optional when only one CH592 is configured.
+      example: "AA:BB:CC:DD:EE:FF"
+      selector:
+        text:
+set_gas:
+  name: Set gas reading
+  description: >-
+    Write the gas reading into the device's DataFlash over the OTA channel.
+    Firmware 1.4.7+ is woken automatically after this explicit action; no B press
+    is needed. Older firmware keeps the value armed for 15 minutes and needs
+    B held for about 10 seconds. Editing the draft alone starts no connection.
+  fields:
+    address:
+      name: Bluetooth address
+      description: Target device address. Optional when only one CH592 is configured.
+      example: "AA:BB:CC:DD:EE:FF"
+      selector:
+        text:
+    value:
+      name: Gas reading
+      description: The value to write, in m³ (0.001 m³ resolution).
+      example: 3050.79
+      selector:
+        number:
+          min: 0
+          max: 99999.999
+          step: 0.001
+          mode: box
+cancel_gas:
+  name: Cancel pending gas write
+  description: Cancel the pending gas write and its wake task when no other write remains.
+  fields:
+    address:
+      name: Bluetooth address
+      description: Target device address. Optional when only one CH592 is configured.
+      example: "AA:BB:CC:DD:EE:FF"
+      selector:
+        text:
+set_threshold:
+  name: Set pulse threshold
+  description: >-
+    Write the TCRT5000 pulse threshold into the device's DataFlash over the OTA
+    channel (firmware 1.4.1+). Firmware 1.4.7+ is woken automatically only after
+    this explicit action. Older firmware needs B held for about 10 seconds
+    within 15 minutes. Editing the draft alone starts no connection.
+  fields:
+    address:
+      name: Bluetooth address
+      description: Target device address. Optional when only one CH592 is configured.
+      example: "AA:BB:CC:DD:EE:FF"
+      selector:
+        text:
+    value:
+      name: Threshold
+      description: >-
+        Detection margin required for one pulse. Lower is more sensitive but
+        counts noise; higher misses pulses. Default 100.
+      example: 100
+      selector:
+        number:
+          min: 20
+          max: 2000
+          step: 10
+          mode: box
+cancel_threshold:
+  name: Cancel pending threshold write
+  description: Cancel the pending threshold write and its wake task when no other write remains.
+  fields:
+    address:
+      name: Bluetooth address
+      description: Target device address. Optional when only one CH592 is configured.
+      example: "AA:BB:CC:DD:EE:FF"
+      selector:
+        text:
+
